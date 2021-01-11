@@ -1,3 +1,0 @@
-[webserver]
-wordpress-host ansible_host=138.197.100.115
-old-host ansible_host=157.230.64.140
