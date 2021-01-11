@@ -6,8 +6,22 @@
   yum:
     name: "{{ packages }}"
     state: present
+    update_cache: yes
   vars:
     packages: '{{ server_software }}'
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt: update_cache=yes name=docker-ce state=latest
 
 - name: configure services
   service:
@@ -16,16 +30,11 @@
     name: "{{ item.name }}"
   with_items: "{{ service_control }}"
 
-- name: Install pip
-  easy_install:
-    name: pip
-    state: latest
-
-- name: allow files to be written to by docker containers
-  lineinfile:
-    path: /etc/selinux/config
-    regexp: '^SELINUX='
-    line: SELINUX=permissive
+# - name: allow files to be written to by docker containers
+#   lineinfile:
+#     path: /etc/selinux/config
+#     regexp: '^SELINUX='
+#     line: SELINUX=permissive
 
 - name: Install docker with pip
   pip:
