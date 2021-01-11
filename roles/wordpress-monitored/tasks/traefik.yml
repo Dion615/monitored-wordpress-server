@@ -39,7 +39,7 @@
     hostname: traefik
     name: traefik
     image: traefik:v1.7.6-alpine
-    state: started
+    state: stopped #Do not start this container until DNS has been set
     networks:
       - name: "{{ traefik_docker_network }}"
     published_ports:
